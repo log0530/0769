@@ -124,13 +124,17 @@ function BackendCoinsUpdate()
         }
 
         // Change for segwit
-        if ($coin->usesegwit) {
+		if ($coin->usemweb) {
+			$template = $remote->getblocktemplate('{"rules":["segwit","mweb"]}');
+		}
+
+		else if ($coin->usesegwit) {
             $template = $remote->getblocktemplate('{"rules":["segwit"]}');
         } else {
             $template = $remote->getblocktemplate('{}');
         }
         // Change for segwit end
-
+        
         if ($template && isset($template['coinbasevalue'])) {
             $coin->reward = $template['coinbasevalue'] / 100000000 * $coin->reward_mul;
 
