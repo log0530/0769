@@ -237,6 +237,14 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 	if(!strcmp(coind->symbol, "PPC")) strcpy(params, "[]");
 	else if(g_stratum_segwit) strcpy(params, "[{\"rules\":[\"segwit\"]}]");
 
+	coind->usemweb |= g_stratum_mweb;
+
+       if(coind->usemweb) 
+       {
+       strcpy(params, "[{\"rules\":[\"segwit\",\"mweb\"]}]");
+       debuglog("%s mweb enabled\n", coind->symbol);
+       } 
+
 	json_value *json = rpc_call(&coind->rpc, "getblocktemplate", params);
 	if(!json || json_is_null(json))
 	{
